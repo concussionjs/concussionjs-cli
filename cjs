@@ -243,42 +243,42 @@ def write_nextera_epilog():
 EXAMPLES:
 
 List applications
->> nta app
+>> cjs app
 
 List users
->> nta user
+>> cjs user
 
 Creating an application
->> nta app -c YOUR_APP_NAME
+>> cjs app -c YOUR_APP_NAME
 or
->> nta app --create YOUR_APP_NAME
+>> cjs app --create YOUR_APP_NAME
 
 Creating an user
->> nta user -c YOUR_USER_NAME
+>> cjs user -c YOUR_USER_NAME
 or
->> nta user --create YOUR_USER_NAME
+>> cjs user --create YOUR_USER_NAME
 
 Deleting an application
->> nta app -d YOUR_APP_NAME
+>> cjs app -d YOUR_APP_NAME
 or
->> nta app --delete YOUR_APP_NAME
+>> cjs app --delete YOUR_APP_NAME
 
 Deleting an user
->> nta user -d YOUR_USER_NAME
+>> cjs user -d YOUR_USER_NAME
 or
->> nta user --delete YOUR_USER_NAME
+>> cjs user --delete YOUR_USER_NAME
 '''
 	return ep
 
 def write_nextera_title():
 	title=u'''
-.__   __.  __________   ___ .___________. _______ .______          ___      
-|  \ |  | |   ____\  \ /  / |           ||   ____||   _  \        /   \     
-|   \|  | |  |__   \  V  /  `---|  |----`|  |__   |  |_)  |      /  ^  \    
-|  . `  | |   __|   >   <       |  |     |   __|  |      /      /  /_\  \   
-|  |\   | |  |____ /  .  \      |  |     |  |____ |  |\  \----./  _____  \  
-|__| \__| |_______/__/ \__\     |__|     |_______|| _| `._____/__/     \__\      	
-	'''
+   _____                               _                  _  _____ 
+  / ____|                             (_)                | |/ ____|
+ | |     ___  _ __   ___ _   _ ___ ___ _  ___  _ __      | | (___  
+ | |    / _ \| '_ \ / __| | | / __/ __| |/ _ \| '_ \ _   | |\___ \ 
+ | |___| (_) | | | | (__| |_| \__ \__ \ | (_) | | | | |__| |____) |
+  \_____\___/|_| |_|\___|\__,_|___/___/_|\___/|_| |_|\____/|_____/ '''
+
 	return writeOKGreen(title)
 
 def main():
