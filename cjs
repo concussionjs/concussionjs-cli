@@ -13,8 +13,8 @@ from socket import *
 from pymongo import Connection
 connection = Connection()
 db = connection.test
-nexteraappsdir = '/root/nextera/apps'
-apptemplatedir = '/root/nextera/app_template'
+nexteraappsdir = os.environ['CJS_APPS']
+apptemplatedir = os.environ['CJS_APPS_TEMPLATES']
 MY_URL = '107.20.230.20'
 
 
