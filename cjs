@@ -11,10 +11,15 @@ from subprocess import call
 from socket import *
 
 from pymongo import Connection
+import redis
+redisClient = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 connection = Connection("localhost")
 db = connection.concussion_prod
 nexteraappsdir = os.environ['CJS_APPS']
 apptemplatedir = os.environ['CJS_APPS_TEMPLATES']
+cjsWebURL = os.environ['CJS_WEB_URL']
+cjsWebDomain = os.environ['CJS_WEB_DOMAIN']
 MY_URL = '107.20.230.20'
 
 
@@ -38,14 +43,14 @@ def find_open_ports(ports):
   
     target = "localhost"  
     targetIP = gethostbyname(target)  
-    print 'Starting scan on host ', targetIP  
+    #print 'Starting scan on host ', targetIP  
   
     #scan reserved ports  
     for i in range(8000, 10000):  
         s = socket(AF_INET, SOCK_STREAM)  
 	  
         result = s.connect_ex((targetIP, i))  
-  	print "result:" , result
+  	#print "result:" , result
         if(result != 0) and (ports.find({"port":i}).count()==0):  
 		return i	
 	s.close()  
@@ -116,25 +121,27 @@ def user_crud(args):
 		
 
 def createApp(apps,name,template):
-	print template
+	#print template
 	applocation = nexteraappsdir + '/' + name
 	ports = db.ports
 	port = find_open_ports(ports)
-	print "after find_open_ports"
+	#print "after find_open_ports"
 	apps.insert({"name":name,"location":applocation,"port":port})
 	app = apps.find_one({"name":name})
-	print "after insert and after getting one app"
+	#print "after insert and after getting one app"
 	my_id = str(app["_id"])
 	proxies = db.proxies
-	print "my_id: ",my_id
+	#print "my_id: ",my_id
+	redisClient.rpush(('frontend:'+name+'.' + cjsWebDomain),'localsamples')
+	redisClient.rpush(('frontend:'+name+'.' + cjsWebDomain),('http://localhost:'+str(port)))
 	proxies.insert({"destinationport":port,"destination":MY_URL,"url":"/"+name})
-	print "after insert and before copytree ",apptemplatedir, " ",template," ",applocation
+	#print "after insert and before copytree ",apptemplatedir, " ",template," ",applocation
 	shutil.copytree(apptemplatedir + "/" + template,applocation,symlinks=False, ignore=None)	
-	print "after copytree"
+	#print "after copytree"
 	templates = db.templates
 	setting = templates.find_one({"name":"settings.js"})
-	print setting
-	print applocation
+	#print setting
+	#print applocation
 	FILE = open(applocation + "/settings.js","w")
 	FILE.writelines(setting["content"].replace("{0}",my_id).replace("{1}",name))
 	FILE.close()
