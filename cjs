@@ -160,7 +160,7 @@ def startApp(apps,name):
 	app_location = nexteraappsdir + '/' + name
 	obj = apps.find_one({"name":name})
 	#command = "forever start {0}/index.js".format(obj["location"])
-	command = "forever start index.js"
+	command = "forever start {0}/index.js".format(app_location)
 	#command = "forever start " + app_location + "/index.js"
 	current_dir = os.getcwd()
 	os.chdir(app_location)
@@ -170,9 +170,7 @@ def startApp(apps,name):
 def stopApp(apps,name):
 	app_location = nexteraappsdir + '/' + name
 	obj = apps.find_one({"name":name})
-        #command = "forever stop {0}/index.js".format(obj["location"])
-        command = "forever stop index.js"
-	#command = "forever stop " + app_location + "/index.js"
+	command = "forever stop {0}/index.js".format(app_location)
 	current_dir = os.getcwd()
         os.chdir(app_location)
 	call(command,shell=True)
@@ -182,7 +180,7 @@ def restartApp(apps,name):
 	app_location = nexteraappsdir + '/' + name
         obj = apps.find_one({"name":name})
         #command = "forever restart {0}/index.js".format(obj["location"])
-        command = "forever restart index.js"
+        command = "forever restart {0}/index.js".format(app_location)
 	#command = "forever restart " + app_location + "/index.js"
 	current_dir = os.getcwd()
         os.chdir(app_location)
