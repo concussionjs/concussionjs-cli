@@ -162,7 +162,7 @@ def startApp(apps,name):
 	#command = "forever start {0}/index.js".format(obj["location"])
 	#command = "forever start {0}/index.js".format(app_location)
 	#command = "forever start " + app_location + "/index.js"
-	command = "mon -d --log /var/log/{1}.log \"node {0}/index.js\" -p /var/log/{1}.pid -m /var/log/{1}-mon.pid".format(app_location,name)
+	command = "mon -d --log /home/concussed/concussionjs-core/log/{1}.log \"node {0}/index.js\" -p /home/concussed/concussionjs-core/log/{1}.pid -m /home/concussed/concussionjs-core/log/{1}-mon.pid".format(app_location,name)
 	current_dir = os.getcwd()
 	os.chdir(app_location)
 	call(command,shell=True)
@@ -171,7 +171,7 @@ def startApp(apps,name):
 def stopApp(apps,name):
 	app_location = nexteraappsdir + '/' + name
 	obj = apps.find_one({"name":name})
-	command = "kill `cat /var/log/{0}-mon.pid`".format(name)
+	command = "kill `cat /home/concussed/concussionjs-core/log/{0}-mon.pid`".format(name)
 	current_dir = os.getcwd()
         os.chdir(app_location)
 	call(command,shell=True)
