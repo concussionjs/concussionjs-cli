@@ -22,7 +22,6 @@ cjsWebURL = os.environ['CJS_WEB_URL']
 cjsWebDomain = os.environ['CJS_WEB_DOMAIN']
 MY_URL = '107.20.230.20'
 
-
 class bcolors:
     	HEADER = '\033[95m'
     	OKBLUE = '\033[94m'
@@ -136,7 +135,7 @@ def createApp(apps,name,template):
 	redisClient.rpush(('frontend:'+name+'.' + cjsWebDomain),('http://localhost:'+str(port)))
 	proxies.insert({"destinationport":port,"destination":MY_URL,"url":"/"+name})
 	#print "after insert and before copytree ",apptemplatedir, " ",template," ",applocation
-	shutil.copytree(apptemplatedir + "/" + template,applocation,symlinks=False, ignore=None)	
+	shutil.copytree(apptemplatedir + "/" + template,applocation,symlinks=True, ignore=None)	
 	#print "after copytree"
 	templates = db.templates
 	setting = templates.find_one({"name":"settings.js"})
@@ -162,7 +161,7 @@ def startApp(apps,name):
 	#command = "forever start {0}/index.js".format(obj["location"])
 	#command = "forever start {0}/index.js".format(app_location)
 	#command = "forever start " + app_location + "/index.js"
-	command = "mon -d --log /home/concussed/concussionjs-core/log/{1}.log \"node {0}/index.js\" -p /home/concussed/concussionjs-core/log/{1}.pid -m /home/concussed/concussionjs-core/log/{1}-mon.pid".format(app_location,name)
+	command = "mon -d --log {2}/../log/{1}.log \"node {0}/index.js\" -p {2}/../log/{1}.pid -m {2}/../log/{1}-mon.pid".format(app_location,name,nexteraappsdir)
 	current_dir = os.getcwd()
 	os.chdir(app_location)
 	call(command,shell=True)
@@ -171,7 +170,7 @@ def startApp(apps,name):
 def stopApp(apps,name):
 	app_location = nexteraappsdir + '/' + name
 	obj = apps.find_one({"name":name})
-	command = "kill `cat /home/concussed/concussionjs-core/log/{0}-mon.pid`".format(name)
+	command = "kill `cat {1}/../log/{0}-mon.pid`".format(name,nexteraappsdir)
 	current_dir = os.getcwd()
         os.chdir(app_location)
 	call(command,shell=True)
